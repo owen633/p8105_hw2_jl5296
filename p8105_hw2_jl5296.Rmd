@@ -23,7 +23,10 @@ raw_transit_data = read_csv(file = "./hw2_data/NYC_Transit_Subway_Entrance_And_E
 tidy1_transit_data = 
   janitor::clean_names(raw_transit_data) %>%
   select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada )
-  
 
+```
+## The code chunk below converts the "entry" variable into logical
+```{r convert_variable, eval = FALSE}
+recode(tidy1_transit_data$entry, YES = "TRUE", NO = "FALSE")
 ```
 
