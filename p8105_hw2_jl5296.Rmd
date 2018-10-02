@@ -15,25 +15,19 @@ library(tidyverse)
 
 ```{r import_transit_data}
 raw_transit_data = read_csv(file = "./hw2_data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
-
-
 ```
 ### The code chunk below cleans the NYC Subway Station data
 
 ```{r clean1_transit_data}
 tidy1_transit_data = 
   janitor::clean_names(raw_transit_data) %>%
-  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada ) 
-  
+  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada ) %>% 
+  mutate(entry = ifelse(entry == "YES", TRUE, FALSE))
+```
 
-```
-### The code chunk below converts the "entry" variable into logical
-```{r convert_variable, eval = FALSE}
-recode(tidy1_transit_data$entry, YES = TRUE, NO = FALSE)
-```
 The dataset contains **line**, **station names**, **station latitude/longitude**, **routes served**, **whether or not there is an entry**, **whether or not there is a vending machine**, **entrance type**, and **Whether ADA compliant** as its variables.
 
-So far, I cleaned the data by first converting the variables names from uppercase to lowercase, then selected those variables of interest. The data is still not tidy right now.
+So far, I cleaned the data by first converting the variables names from uppercase to lowercase. Then, I selected those variables of interest. Finally, I converted the *entry* variable from character to logical. The data is still not tidy right now.
 
 The *dimension* of the resulting data set is `r dim(tidy1_transit_data)`
 
@@ -59,5 +53,7 @@ reformat_data =
 A_train_data = filter (reformat_data, route_name == "A")
 
 ```
+The number of distinct stations that serve train A is `r nrow(A_train_data)`.
 
+Of the stations that serve the A train, `r table(A_train_data$ada)["TRUE"]` are ADA compliant.
 
