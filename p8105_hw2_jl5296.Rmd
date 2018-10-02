@@ -15,6 +15,8 @@ library(tidyverse)
 
 ```{r import_transit_data}
 raw_transit_data = read_csv(file = "./hw2_data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
+
+raw_transit_data
 ```
 ### The code chunk below cleans the NYC Subway Station data
 
@@ -23,6 +25,8 @@ tidy1_transit_data =
   janitor::clean_names(raw_transit_data) %>%
   select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada ) %>% 
   mutate(entry = ifelse(entry == "YES", TRUE, FALSE))
+
+tidy1_transit_data
 ```
 
 The dataset contains **line**, **station names**, **station latitude/longitude**, **routes served**, **whether or not there is an entry**, **whether or not there is a vending machine**, **entrance type**, and **Whether ADA compliant** as its variables.
@@ -38,19 +42,23 @@ tidy2_transit_data = distinct(tidy1_transit_data, line, station_name, .keep_all 
 ada_data = filter(tidy2_transit_data, ada == TRUE)
 
 proportion_data = filter(tidy2_transit_data, vending == "NO")
+
+tidy2_transit_data
 ```
 *   The number of distinct stations is equal to `r nrow(tidy2_transit_data)`.
 *   `r nrow(ada_data)` stations are ADA compliant.
-*   `r table(proportion_data$entry)["YES"]/nrow(proportion_data)` of station entrances/exits without vending allow entrance.
+*   `r table(proportion_data$entry)["TRUE"]/nrow(proportion_data)` of station entrances/exits without vending allow entrance.(Using the dinstict stations dataset)
 
 ### The following code chunk reformats data to allow "route number" and "route name" be distinct variables
 
 ```{r reformat_data}
-reformat_data = 
+reformat_transit_data = 
   gather(tidy2_transit_data, key = route_number, value = route_name, route1:route11) %>% 
   select(line, station_name, route_number, route_name, everything())
 
-A_train_data = filter (reformat_data, route_name == "A")
+reformat_transit_data
+
+A_train_data = filter(reformat_transit_data, route_name == "A")
 
 ```
 The number of distinct stations that serve train A is `r nrow(A_train_data)`.
