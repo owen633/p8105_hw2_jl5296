@@ -46,6 +46,18 @@ ada_data = filter(tidy2_transit_data, ada == TRUE)
 proportion_data = filter(tidy2_transit_data, vending == "NO")
 ```
 *   The number of distinct stations is equal to `r nrow(tidy2_transit_data)`.
-*   `r nrow(ada_data)`stations are ADA compliant.
+*   `r nrow(ada_data)` stations are ADA compliant.
 *   `r table(proportion_data$entry)["YES"]/nrow(proportion_data)` of station entrances/exits without vending allow entrance.
+
+### The following code chunk reformats data to allow "route number" and "route name" be distinct variables
+
+```{r reformat_data}
+reformat_data = 
+  gather(tidy2_transit_data, key = route_number, value = route_name, route1:route11) %>% 
+  select(line, station_name, route_number, route_name, everything())
+
+A_train_data = filter (reformat_data, route_name == "A")
+
+```
+
 
