@@ -45,5 +45,7 @@ ada_data = filter(tidy2_transit_data, ada == TRUE)
 
 proportion_data = filter(tidy2_transit_data, vending == "NO")
 ```
-
+*   The number of distinct stations is equal to `r nrow(tidy2_transit_data)`.
+*   `r nrow(ada_data)`stations are ADA compliant.
+*   `r table(proportion_data$entry)["YES"]/nrow(proportion_data)` of station entrances/exits without vending allow entrance.
 
