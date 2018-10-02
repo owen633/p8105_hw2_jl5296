@@ -16,18 +16,20 @@ library(tidyverse)
 ```{r import_transit_data}
 raw_transit_data = read_csv(file = "./hw2_data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
 
+
 ```
 ### The code chunk below cleans the NYC Subway Station data
 
-```{r clean_transit_data}
+```{r clean1_transit_data}
 tidy1_transit_data = 
   janitor::clean_names(raw_transit_data) %>%
-  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada )
+  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada ) 
+  
 
 ```
 ### The code chunk below converts the "entry" variable into logical
 ```{r convert_variable, eval = FALSE}
-recode(tidy1_transit_data$entry, YES = "TRUE", NO = "FALSE")
+recode(tidy1_transit_data$entry, YES = TRUE, NO = FALSE)
 ```
 The dataset contains **line**, **station names**, **station latitude/longitude**, **routes served**, **whether or not there is an entry**, **whether or not there is a vending machine**, **entrance type**, and **Whether ADA compliant** as its variables.
 
@@ -35,5 +37,13 @@ So far, I cleaned the data by first converting the variables names from uppercas
 
 The *dimension* of the resulting data set is `r dim(tidy1_transit_data)`
 
+### The code chunk below further cleans the dataset
+```{r clean2_transit_data}
+tidy2_transit_data = distinct(tidy1_transit_data, line, station_name, .keep_all = TRUE)
+
+ada_data = filter(tidy2_transit_data, ada == TRUE)
+
+proportion_data = filter(tidy2_transit_data, vending == "NO")
+```
 
 
