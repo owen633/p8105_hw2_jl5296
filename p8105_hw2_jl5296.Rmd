@@ -8,6 +8,7 @@ output: github_document
 ```{r setup_load_packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(readxl)
 ```
 # Problem 1
 
@@ -65,3 +66,18 @@ The number of distinct stations that serve train A is `r nrow(A_train_data)`.
 
 Of the stations that serve the A train, `r table(A_train_data$ada)["TRUE"]` are ADA compliant.
 
+# Problem 2
+
+### The following code chunk imports Mr.Trash Wheel dataset and cleans the Mr.Trash Wheel sheet
+
+```{r import_clean_dataset}
+
+wheelsheet_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 1, range = "A2:N258") %>% 
+  janitor::clean_names() %>% 
+  rename(weight = weight_tons, volume = volume_cubic_yards) %>% 
+  filter(!is.na(dumpster)) %>% 
+  mutate(sports_balls = as.integer(round(sports_balls)))
+
+wheelsheet_data
+
+```
