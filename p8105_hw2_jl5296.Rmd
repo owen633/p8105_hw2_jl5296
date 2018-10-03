@@ -109,5 +109,10 @@ precip_comb_data =
 
 precip_comb_data
 
-```
+wheel_2016_data = filter(wheelsheet_data, year == 2016)
 
+```
+* The number of observations for the resulting Mr. Trash Wheel dataset is `r nrow(wheelsheet_data)`, and the number of observations for the combined precipitation data of years 2016&2017 is `r nrow(precip_comb_data)`.
+* The key variables in the resulting Mr. Trash Wheel dataset are "dumpster number","month","year","date","weight", and "volume". The key variables for the combined precipitation dataset are "month", "year", and "precipitation total".
+*   The total precipitation in 2017 is `r sum(precip_2017_data$precip_total)`.
+*   The median number of sports balls in a dumpster in 2016 is `r median(wheel_2016_data$sports_balls)`.
