@@ -182,7 +182,6 @@ ny_queens_data = filter(tidy_brfss_data, county == "NY - Queens County")
 
 comb_ny_queens_data = inner_join(ny_county_data, ny_queens_data, by = "year")
 
-
 ggplot(comb_ny_queens_data, aes(x = excellent_prop.x, y = excellent_prop.y)) +
   geom_point(aes(color = year), alpha = .5) +
   labs(
@@ -191,7 +190,7 @@ ggplot(comb_ny_queens_data, aes(x = excellent_prop.x, y = excellent_prop.y)) +
     y = "Queens County Excellent Response Proportion(%)"
   ) +
   viridis::scale_color_viridis(
-  name = "Year",
+  name = "Year"
   ) +
   theme_classic() +
   theme(legend.position = "bottom")
