@@ -116,3 +116,34 @@ wheel_2016_data = filter(wheelsheet_data, year == 2016)
 * The key variables in the resulting Mr. Trash Wheel dataset are "dumpster number","month","year","date","weight", and "volume". The key variables for the combined precipitation dataset are "month", "year", and "precipitation total".
 *   The total precipitation in 2017 is `r sum(precip_2017_data$precip_total)`.
 *   The median number of sports balls in a dumpster in 2016 is `r median(wheel_2016_data$sports_balls)`.
+
+# Problem 3
+
+### The following code chunk installs and loads the BRFSS data
+
+```{r install_load_p8105_package, include = FALSE}
+devtools::install_github("p8105/p8105.datasets")
+library(p8105.datasets)
+
+data("brfss_smart2010")
+
+```
+### The following code chunk cleans and reformats the brfss dataset
+
+```{r tidy_brfss_data}
+tidy_brfss_data = 
+  janitor::clean_names(brfss_smart2010) %>% 
+  rename(state = locationabbr, county = locationdesc, resp_id = respid) %>% 
+  filter(topic == "Overall Health") %>% 
+  select(year:county, response, data_value) %>% 
+  spread(response, data_value) %>% 
+  janitor::clean_names() %>% 
+  select(year, state, county, excellent, very_good, good, fair, poor) %>% 
+  arrange(desc(year)) %>% 
+  rename(excellent_prop = excellent, very_good_prop = very_good, good_prop = good, fair_prop = fair, poor_prop = poor) %>% 
+  mutate(excellent_verygood_prop = excellent_prop + very_good_prop)
+
+tidy_brfss_data
+
+```
+
