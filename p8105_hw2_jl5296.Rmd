@@ -172,5 +172,13 @@ excellent_2002_data = filter(tidy_brfss_data, year == 2002)
 
 ### The following code chunk generates plots to visually display the dataset
 
+```{r brfss_plots}
+hist_2012 = ggplot(excellent_2002_data, aes(x = excellent_prop)) + 
+  geom_histogram(color = "green")
+hist_2012 + ggtitle("2012 'Excellent' Response Values Histogram") + xlab("Proportion of 'Excellent' Responses(%)")
+
+
+
+```
 
 
