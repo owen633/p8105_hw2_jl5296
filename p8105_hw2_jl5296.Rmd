@@ -81,3 +81,33 @@ wheelsheet_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.
 wheelsheet_data
 
 ```
+### The following code chunk reads in and cleans data for 2016&2017 precipitation
+
+```{r import_clean_precipitation_data}
+precip_2016_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 4, range = "A2:B14") %>% 
+  janitor::clean_names() %>% 
+  rename(precip_total = total) %>% 
+  mutate(year = 2016) %>% 
+  select(month, year, precip_total)
+
+precip_2017_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 3, range = "A2:B10") %>% 
+  janitor::clean_names() %>% 
+  rename(precip_total = total) %>% 
+  mutate(year = 2017) %>% 
+  select(month, year, precip_total)
+
+precip_2016_data
+precip_2017_data
+
+```
+### The following code chunk combines 2016 and 2017 precipitation into a single dataset and converts *month* to a character variable
+
+```{r combine_convert_data}
+precip_comb_data = 
+  bind_rows(precip_2016_data, precip_2017_data) %>% 
+  mutate(month = as.character(month))
+
+precip_comb_data
+
+```
+
