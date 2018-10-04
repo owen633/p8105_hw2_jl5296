@@ -6,7 +6,6 @@ output: github_document
 ---
 
 ```{r setup_load_packages, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 ```
@@ -71,8 +70,8 @@ Of the stations that serve the A train, `r table(A_train_data$ada)["TRUE"]` are 
 ### The following code chunk imports Mr.Trash Wheel dataset and cleans the Mr.Trash Wheel sheet
 
 ```{r import_clean_dataset}
-
-wheelsheet_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 1, range = "A2:N258") %>% 
+wheelsheet_data = 
+  read_excel("./hw2_data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = 1, range = "A2:N338") %>% 
   janitor::clean_names() %>% 
   rename(weight = weight_tons, volume = volume_cubic_yards) %>% 
   filter(!is.na(dumpster)) %>% 
@@ -84,13 +83,13 @@ wheelsheet_data
 ### The following code chunk reads in and cleans data for 2016&2017 precipitation
 
 ```{r import_clean_precipitation_data}
-precip_2016_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 4, range = "A2:B14") %>% 
+precip_2016_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = 5, range = "A2:B14") %>% 
   janitor::clean_names() %>% 
   rename(precip_total = total) %>% 
   mutate(year = 2016) %>% 
   select(month, year, precip_total)
 
-precip_2017_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = 3, range = "A2:B10") %>% 
+precip_2017_data = read_excel("./hw2_data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = 4, range = "A2:B14") %>% 
   janitor::clean_names() %>% 
   rename(precip_total = total) %>% 
   mutate(year = 2017) %>% 
