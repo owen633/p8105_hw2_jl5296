@@ -192,8 +192,6 @@ ggplot(comb_ny_queens_data, aes(x = year, y = excellent_prop)) +
   theme_classic() +
   theme(legend.position = "bottom")
 
-
-
 ```
 
 
