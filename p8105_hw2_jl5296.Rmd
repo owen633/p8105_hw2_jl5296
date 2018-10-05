@@ -6,6 +6,12 @@ output: github_document
 ---
 
 ```{r setup_load_packages, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
 library(tidyverse)
 library(readxl)
 ```
@@ -41,7 +47,7 @@ tidy2_transit_data = distinct(tidy1_transit_data, line, station_name, .keep_all 
 
 ada_data = filter(tidy2_transit_data, ada == TRUE)
 
-proportion_data = filter(tidy2_transit_data, vending == "NO")
+proportion_data = filter(tidy1_transit_data, vending == "NO")
 
 tidy2_transit_data
 ```
@@ -104,7 +110,8 @@ precip_2017_data
 ```{r combine_convert_data}
 precip_comb_data = 
   bind_rows(precip_2016_data, precip_2017_data) %>% 
-  mutate(month = as.character(month))
+  mutate(month = month.abb[month])
+ 
 
 precip_comb_data
 
@@ -152,21 +159,14 @@ uniq_loc_data = distinct(tidy_brfss_data, county, .keep_all = TRUE)
 
 uniq_state_data = distinct(tidy_brfss_data, state, .keep_all = TRUE)
 
-Mode = function(x){ 
-    if (all(table(x) == max(table(x))))
-         mod = NA
-    else
-         if(is.numeric(x))
-    mod = as.numeric(names(table(x))[table(x) == max(table(x))])
-    else
-         mod = names(table(x))[table(x) == max(table(x))]
-    return(mod)
-}
-
+tidy_brfss_data %>% 
+  count(tidy_brfss_data$state) %>% 
+  arrange(desc(n))
+  
 excellent_2002_data = filter(tidy_brfss_data, year == 2002)
 
 ```
-*   The number of unique locations included in the dataset is `r nrow(uniq_loc_data)`. The answer to whether every state has been represented is `r (nrow(uniq_state_data) >= 50)` (There are actually `r nrow(uniq_state_data)` states being observed counting DC as one). The state being mostly observed is `r Mode(tidy_brfss_data$state)`.
+*   The number of unique locations included in the dataset is `r nrow(uniq_loc_data)`. According to the table above, the state being observed the most is NJ (146 times).
 *   The median of the "Excellent" response value in 2002 is `r median(excellent_2002_data$excellent_prop, na.rm = TRUE)`.
 
 ### The following code chunk generates plots to visually display the dataset
@@ -176,20 +176,18 @@ hist_2012 = ggplot(excellent_2002_data, aes(x = excellent_prop)) +
   geom_histogram(color = "green")
 hist_2012 + ggtitle("2012 'Excellent' Response Values Histogram") + xlab("Proportion of 'Excellent' Responses(%)")
 
-ny_county_data = filter(tidy_brfss_data, county == "NY - New York County")
-ny_queens_data = filter(tidy_brfss_data, county == "NY - Queens County")
+comb_ny_queens_data = filter(tidy_brfss_data, county == "NY - New York County"|county == "NY - Queens County")
 
-comb_ny_queens_data = inner_join(ny_county_data, ny_queens_data, by = "year")
-
-ggplot(comb_ny_queens_data, aes(x = excellent_prop.x, y = excellent_prop.y)) +
-  geom_point(aes(color = year), alpha = .5) +
+ggplot(comb_ny_queens_data, aes(x = year, y = excellent_prop)) +
+  geom_point(aes(color = county), alpha = .5) +
   labs(
     title = "Scatterplot of 2002-2010 NY County and Queens County 'Excellent' Response Value",
-    x = "NY County Excellent Response Proportion(%)",
-    y = "Queens County Excellent Response Proportion(%)"
+    x = "Year",
+    y = "Excellent Response Proportion(%)"
   ) +
   viridis::scale_color_viridis(
-  name = "Year"
+  name = "County",
+  discrete = TRUE
   ) +
   theme_classic() +
   theme(legend.position = "bottom")
