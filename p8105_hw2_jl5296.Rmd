@@ -166,7 +166,7 @@ tidy_brfss_data %>%
 excellent_2002_data = filter(tidy_brfss_data, year == 2002)
 
 ```
-*   The number of unique locations included in the dataset is `r nrow(uniq_loc_data)`. According to the table above, the state being observed the most is NJ (146 times).
+*   The number of unique locations included in the dataset is `r nrow(uniq_loc_data)`. The answer to whether every state has been represented is `r (nrow(uniq_state_data) >= 50)` (There are actually `r nrow(uniq_state_data)` states being observed counting DC as one). According to the table above, the state being observed the most is NJ(146 times).
 *   The median of the "Excellent" response value in 2002 is `r median(excellent_2002_data$excellent_prop, na.rm = TRUE)`.
 
 ### The following code chunk generates plots to visually display the dataset
